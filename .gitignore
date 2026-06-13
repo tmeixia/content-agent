@@ -1,0 +1,14 @@
+
+
+# 系统/编辑器
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# 环境与密钥
+.env
+.env.*
+*.key
+secrets/
+logs/
