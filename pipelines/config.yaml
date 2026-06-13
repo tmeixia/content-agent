@@ -1,0 +1,45 @@
+# Content Agent 产出配置
+# orchestrator skill 读取此文件决定"哪些知识 → 哪些平台 → 何时产出"
+
+topic: react-performance        # 对应 knowledge/<topic>/
+
+platforms:
+  - name: geektime              # 极客时间专栏
+    granularity: topic          # 整主题成体系，每个原子 → 一章
+    atoms: all                  # all = 全部 ready 的原子
+
+  - name: imooc                 # 慕课网视频课（多步流水线，委托 imooc-pipeline）
+    pipeline: imooc-pipeline    # 大纲→讲师稿→PPT→试讲报告→优化定稿
+    granularity: course         # 先出课程大纲，再逐节走七步流程
+    atoms: all
+    course:                     # 课程定位（传给 imooc-outline）
+      audience: 有 React 基础的中级前端
+      duration_min: 60
+    ppt_template: templates/imooc-ppt-template.md  # 慕课官方课件质量标准（2026-06-12 已确认）
+    lessons:                    # 本次实跑只走通这一节做演示（留空=全部节）
+      - react-rerender-cause
+
+  - name: ebook                 # 电子书
+    granularity: topic          # 整主题汇编成一份长文档
+    atoms: all
+
+  - name: wechat                # 公众号
+    granularity: atom           # 逐个原子，一篇一个点
+    atoms:                      # 只选这些原子产出（留空=all）
+      - react-rerender-cause
+
+  - name: zhihu                 # 知乎长文/回答
+    granularity: atom           # 选带"踩坑/反直觉"的原子做长文
+    atoms:
+      - react-key-and-list
+
+  - name: juejin                # 掘金技术文章
+    granularity: atom           # 逐个原子或合集，技术实战向
+    atoms:
+      - react-memo-usememo
+
+schedule: "0 9 * * 1"           # 每周一 09:00（cron，定时化阶段用）
+review: manual                  # manual = 产出到 output/ 后人工审，不自动发布
+
+output_dir: output              # 产出根目录
+glossary: knowledge/_glossary.md
